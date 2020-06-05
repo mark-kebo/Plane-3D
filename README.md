@@ -1,1 +1,2 @@
-# Plane-3D
+# Plane phisics simulation 3D
+Godot
