@@ -1,10 +1,10 @@
 extends Spatial
 
-export var period = 80  # period of first octave of noise 
-export var octaves = 50  # how many octaves of noise we add together
-export var persistence = 0.5  # the multiplier between each octave 
-export var lacunarity = 2.0  # the increase in frequency between each octave
-export var amplitude = 100  # maximum noise value
+export var period = 0.0  # period of first octave of noise 
+export var octaves = 0.0  # how many octaves of noise we add together
+export var persistence = 0.0  # the multiplier between each octave 
+export var lacunarity = 0.0  # the increase in frequency between each octave
+export var amplitude = 0.0  # maximum noise value
 
 var noise
 

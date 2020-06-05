@@ -16,7 +16,7 @@ transform = Transform( -0.649786, -0.255155, -0.716013, -0.616985, 0.727236, 0.3
 light_color = Color( 1, 0.968627, 0.807843, 1 )
 light_energy = 4.0
 
-[node name="Player3" parent="." instance=ExtResource( 2 )]
+[node name="Player" parent="." instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.908, 0 )
 
 [node name="Water" type="MeshInstance" parent="."]
