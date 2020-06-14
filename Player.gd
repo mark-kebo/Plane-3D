@@ -1,15 +1,14 @@
 extends RigidBody
 
 const GRAVITY: float = 9.8
-const PLANE_MASS: float = 300.0
-const FLAT_PLANE = Plane.PLANE_XZ
+const PLANE_MASS: float = 50.0
 
 const YAW_FORCE = 200.0
-const ROLL_FORCE = 150.0
-const PITCH_FORCE = 100.0
+const ROLL_FORCE = 50.0
+const PITCH_FORCE = 1000.0
 
-const THRUST_MAX = 500.0
-var currentThrust = 100.0
+const THRUST_MAX = 7.0
+var currentThrust = 0.0
 
 const AIR_DENSITY = 1.2041
 const WINGS_AREA = 2.0
@@ -43,12 +42,13 @@ func _integrate_forces(state):
 	yaw()
 	
 func addThrust():
-	var toAdd = 1
+	var toAdd = 0.1
 	if Input.is_action_pressed("ui_up"):
 		currentThrust += toAdd
 		currentThrust = clamp(currentThrust, 0, THRUST_MAX)
 		var thrustVec = getForwardVector() * currentThrust
 		statePhysics.apply_central_impulse(thrustVec)
+		#print(thrustVec)
 	else:
 		currentThrust -= toAdd
 		currentThrust = clamp(currentThrust, 0, THRUST_MAX)
@@ -76,7 +76,7 @@ func pitch():
 	if Input.is_action_pressed("movement_down"):
 		var test = -getLeftVector() * PITCH_FORCE * deltaPhysics
 		statePhysics.apply_torque_impulse(test)
-		print(test)
+		#print(test)
 	elif Input.is_action_pressed("movement_up"):
 		var test = getLeftVector() * PITCH_FORCE * deltaPhysics
 		statePhysics.apply_torque_impulse(test)
@@ -94,7 +94,7 @@ func getLiftCoeff() -> float:
 	return 2 * PI / getAngleOfAttack()
 
 func getDragCoeff() -> float:
-	return 2 * PI * getAngleOfAttack()
+	return 0.4
 	
 func getAngleOfAttack() -> float:
 	var forwardVector = getForwardVector()
@@ -113,3 +113,6 @@ func getUpVector() -> Vector3:
 	
 func getLeftVector() -> Vector3:
 	return global_transform.basis.x.normalized()
+
+#################
+
