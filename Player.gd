@@ -3,11 +3,11 @@ extends RigidBody
 const GRAVITY: float = 9.8
 const PLANE_MASS: float = 50.0
 
-const YAW_FORCE = 200.0
-const ROLL_FORCE = 50.0
-const PITCH_FORCE = 1000.0
+const YAW_FORCE = 50.0
+const ROLL_FORCE = 10.0
+const PITCH_FORCE = 50.0
 
-const THRUST_MAX = 7.0
+const THRUST_MAX = 5.0
 var currentThrust = 0.0
 
 const AIR_DENSITY = 1.2041
@@ -36,27 +36,27 @@ func _integrate_forces(state):
 	addLift()
 	addDrag()
 	statePhysics.add_central_force(Vector3.DOWN * mass * GRAVITY)
-	
+
 	roll()
 	pitch()
 	yaw()
 	
 func addThrust():
-	var toAdd = 0.1
+	var toAdd = 0.5
 	if Input.is_action_pressed("ui_up"):
 		currentThrust += toAdd
 		currentThrust = clamp(currentThrust, 0, THRUST_MAX)
 		var thrustVec = getForwardVector() * currentThrust
 		statePhysics.apply_central_impulse(thrustVec)
-		#print(thrustVec)
 	else:
 		currentThrust -= toAdd
 		currentThrust = clamp(currentThrust, 0, THRUST_MAX)
 	
 func addLift():
 	var lift = getLiftCoeff() * 0.5 * AIR_DENSITY * WINGS_AREA * pow(getForwardSpeed(), 2) * deltaPhysics
-	var liftVector = getUpVector() * lift
+	var liftVector = -getUpVector() * lift
 	statePhysics.apply_central_impulse(liftVector)
+	print(liftVector)
 	
 func addDrag():
 	var drag = getDragCoeff() * 0.5 * AIR_DENSITY * WINGS_AREA * pow(getForwardSpeed(), 2) * deltaPhysics
@@ -113,6 +113,3 @@ func getUpVector() -> Vector3:
 	
 func getLeftVector() -> Vector3:
 	return global_transform.basis.x.normalized()
-
-#################
-
