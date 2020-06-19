@@ -1,0 +1,57 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://marker/AxisMarker3D.gd" type="Script" id=1]
+
+[sub_resource type="CubeMesh" id=18]
+size = Vector3( 0.1, 0.1, 0.1 )
+
+[sub_resource type="SpatialMaterial" id=19]
+albedo_color = Color( 0, 1, 1, 1 )
+
+[sub_resource type="SpatialMaterial" id=20]
+albedo_color = Color( 1, 0, 0, 1 )
+
+[sub_resource type="SpatialMaterial" id=21]
+albedo_color = Color( 0, 1, 0, 1 )
+
+[sub_resource type="SpatialMaterial" id=22]
+albedo_color = Color( 0, 0, 1, 1 )
+
+[node name="AxisMarker" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="Origin" type="Node" parent="."]
+
+[node name="Center" type="MeshInstance" parent="."]
+transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0 )
+mesh = SubResource( 18 )
+material/0 = SubResource( 19 )
+
+[node name="forward" type="Spatial" parent="."]
+
+[node name="Cube" type="MeshInstance" parent="forward"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0, 0 )
+mesh = SubResource( 18 )
+material/0 = SubResource( 20 )
+
+[node name="lift" type="Spatial" parent="."]
+
+[node name="Cube" type="MeshInstance" parent="lift"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0 )
+mesh = SubResource( 18 )
+material/0 = SubResource( 21 )
+
+[node name="drag" type="Spatial" parent="."]
+
+[node name="Cube" type="MeshInstance" parent="drag"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.05 )
+mesh = SubResource( 18 )
+material/0 = SubResource( 22 )
+
+[node name="currentThrust" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.176287, 0.28435, 0 )
+
+[node name="Cube" type="MeshInstance" parent="currentThrust"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.05 )
+mesh = SubResource( 18 )
+material/0 = SubResource( 22 )

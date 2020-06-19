@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://ground-texture_(5).jpg" type="Texture" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Camera.gd" type="Script" id=3]
+[ext_resource path="res://marker/AxisMarker3D.gd" type="Script" id=4]
 
 [sub_resource type="PlaneShape" id=1]
 
@@ -16,6 +18,21 @@ size = Vector2( 10000, 10000 )
 subdivide_width = 10
 subdivide_depth = 10
 
+[sub_resource type="CubeMesh" id=4]
+size = Vector3( 0.1, 0.1, 0.1 )
+
+[sub_resource type="SpatialMaterial" id=5]
+albedo_color = Color( 0, 1, 1, 1 )
+
+[sub_resource type="SpatialMaterial" id=6]
+albedo_color = Color( 1, 0, 0, 1 )
+
+[sub_resource type="SpatialMaterial" id=7]
+albedo_color = Color( 0, 1, 0, 1 )
+
+[sub_resource type="SpatialMaterial" id=8]
+albedo_color = Color( 0, 0, 1, 1 )
+
 [node name="World" type="Spatial"]
 
 [node name="StaticBody" type="StaticBody" parent="."]
@@ -26,12 +43,67 @@ shape = SubResource( 1 )
 [node name="MeshInstance" type="MeshInstance" parent="StaticBody"]
 mesh = SubResource( 3 )
 material/0 = null
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
 transform = Transform( -0.649786, -0.255155, -0.716013, -0.616985, 0.727236, 0.300762, 0.443969, 0.6372, -0.629974, 0, 1000, 0 )
 light_color = Color( 1, 0.968627, 0.807843, 1 )
 light_energy = 5.0
+shadow_enabled = true
+
+[node name="Camera" type="Camera" parent="."]
+current = true
+far = 8192.0
+script = ExtResource( 3 )
+follow_node = NodePath("../Player")
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
+angular_damp = 0.1
+
+[node name="AxisMarker" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
-mass = 81.6327
+script = ExtResource( 4 )
+
+[node name="Origin" type="Node" parent="AxisMarker"]
+
+[node name="Center" type="MeshInstance" parent="AxisMarker"]
+transform = Transform( 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0 )
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="forward" type="Spatial" parent="AxisMarker"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00310135, 0.00519168, -0.00257969 )
+visible = false
+
+[node name="Cube" type="MeshInstance" parent="AxisMarker/forward"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.05 )
+mesh = SubResource( 4 )
+material/0 = SubResource( 6 )
+
+[node name="lift" type="Spatial" parent="AxisMarker"]
+visible = false
+
+[node name="Cube" type="MeshInstance" parent="AxisMarker/lift"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0 )
+mesh = SubResource( 4 )
+material/0 = SubResource( 7 )
+
+[node name="drag" type="Spatial" parent="AxisMarker"]
+visible = false
+
+[node name="Cube" type="MeshInstance" parent="AxisMarker/drag"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.05 )
+mesh = SubResource( 4 )
+material/0 = SubResource( 8 )
+
+[node name="currentThrust" type="Spatial" parent="AxisMarker"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.176287, 0.28435, 0 )
+
+[node name="Cube" type="MeshInstance" parent="AxisMarker/currentThrust"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.05 )
+mesh = SubResource( 4 )
+material/0 = SubResource( 8 )
+
+[editable path="Player"]
