@@ -7,7 +7,7 @@ const YAW_FORCE = 50.0
 const ROLL_FORCE = 50.0
 const PITCH_FORCE = 50.0
 
-const THRUST_MAX = 50.0
+const THRUST_MAX = 20.0
 var currentThrust = 0.0
 
 const AIR_DENSITY = 1.2041
@@ -56,25 +56,31 @@ func addThrust():
 		currentThrust -= toAdd
 		currentThrust = clamp(currentThrust, 0, THRUST_MAX)
 	var thrustVec = getForwardVector() * currentThrust
-	statePhysics.apply_central_impulse(thrustVec)
+#	statePhysics.apply_central_impulse(thrustVec)
+#	statePhysics.apply_impulse(Vector3(0,0,-0.3), thrustVec)
+	statePhysics.apply_impulse(Vector3(1.5,0,0), thrustVec/2)
+	statePhysics.apply_impulse(Vector3(-1.5,0,0), thrustVec/2)
+
 	
 func addLift():
 	lift = getLiftCoeff() * 0.5 * AIR_DENSITY * WINGS_AREA * pow(getForwardSpeed(), 2) * deltaPhysics
-	liftVector = -getUpVector() * lift
-	statePhysics.apply_central_impulse(liftVector)
-#	print(liftVector)
+	liftVector = -getUpVector() * clamp(lift, 0 , GRAVITY)
+#	statePhysics.apply_central_impulse(liftVector)
+	statePhysics.apply_impulse(Vector3(1.5,0,0), liftVector/2)
+	statePhysics.apply_impulse(Vector3(-1.5,0,0), liftVector/2)
+
 	
 func addDrag():
 	drag = getDragCoeff() * 0.5 * AIR_DENSITY * WINGS_AREA * pow(getForwardSpeed(), 2) * deltaPhysics
 	dragVector = -linear_velocity.normalized() * drag
 	statePhysics.apply_central_impulse(dragVector)
+#	statePhysics.apply_impulse(Vector3(0,0,0.5), dragVector)
 	
 func roll():
-	if Input.is_action_pressed("roll_left"):
+	if Input.is_action_pressed("ui_left"):
 		statePhysics.apply_torque_impulse(-getForwardVector() * ROLL_FORCE * deltaPhysics)
-	elif Input.is_action_pressed("roll_right"):
+	elif Input.is_action_pressed("ui_right"):
 		statePhysics.apply_torque_impulse(getForwardVector() * ROLL_FORCE * deltaPhysics)
-		
 
 func pitch():
 	if Input.is_action_pressed("pitch_down"):
